@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer" app clipped>
-      <v-list dense flat>
+      <v-list flat>
         <v-list-item :to="{ name: 'Home' }" link>
           <v-list-item-action>
             <v-icon>mdi-home-outline</v-icon>
@@ -45,7 +45,7 @@ export default {
     drawer: null
   }),
   created() {
-    this.$vuetify.theme.dark = true;
+    this.$vuetify.theme.dark = true
   }
-};
+}
 </script>
