@@ -1,6 +1,6 @@
 <template>
   <v-container fluid fill-height>
-    <v-row align="center" justify="center">
+    <v-row align="center" justify="space-around">
       <v-card>
         <h1>Hello World :D</h1>
         <v-select
@@ -31,13 +31,12 @@ export default {
     let api =
       'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=rdec-key-123-45678-011121314'
     this.axios.get(api).then((res) => {
-      for (let i = 0; i < res.data.records.location.length; i++) {
+      this.apidata = res.data.records.location
+      for (let i = 0; i < this.apidata.length; i++) {
         if (
-          citys.includes(
-            res.data.records.location[i].parameter[0].parameterValue
-          ) == false
+          citys.includes(this.apidata[i].parameter[0].parameterValue) == false
         ) {
-          citys.push(res.data.records.location[i].parameter[0].parameterValue)
+          citys.push(this.apidata[i].parameter[0].parameterValue)
         }
       }
       this.city = citys
@@ -45,6 +44,7 @@ export default {
   },
   data: function() {
     return {
+      apidata: [],
       city: [],
       selcity: '',
       dist: [],
@@ -58,35 +58,21 @@ export default {
     },
     showdist() {
       let dists = new Array()
-      let api =
-        'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=rdec-key-123-45678-011121314'
-      this.axios.get(api).then((res) => {
-        for (let i = 0; i < res.data.records.location.length; i++) {
-          if (
-            res.data.records.location[i].parameter[0].parameterValue ==
-            this.selcity
-          ) {
-            dists.push(res.data.records.location[i].parameter[2].parameterValue)
-          }
+      for (let i = 0; i < this.apidata.length; i++) {
+        if (this.apidata[i].parameter[0].parameterValue == this.selcity) {
+          dists.push(this.apidata[i].parameter[2].parameterValue)
         }
-        this.dist = dists
-      })
+      }
+      this.dist = dists
     },
     showplace() {
       let places = new Array()
-      let api =
-        'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=rdec-key-123-45678-011121314'
-      this.axios.get(api).then((res) => {
-        for (let i = 0; i < res.data.records.location.length; i++) {
-          if (
-            res.data.records.location[i].parameter[2].parameterValue ==
-            this.seldist
-          ) {
-            places.push(res.data.records.location[i].locationName)
-          }
+      for (let i = 0; i < this.apidata.length; i++) {
+        if (this.apidata[i].parameter[2].parameterValue == this.seldist) {
+          places.push(this.apidata[i].locationName)
         }
-        this.place = places
-      })
+      }
+      this.place = places
     }
   }
 }
