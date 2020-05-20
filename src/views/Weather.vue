@@ -1,15 +1,17 @@
 <template>
   <v-container fluid fill-height>
-    <v-row align="center" justify="space-around">
-      <v-card outlined>
-        <h1>地點選擇</h1>
+    <v-row justify="center">
+      <v-card outlined class="d-flex">
+        <v-card-title class="display-1 pr-12">地點選擇</v-card-title>
         <v-select
+          class="pr-6"
           :items="city"
           label="請選擇縣市"
           v-model="selcity"
           v-on:change="showdist()"
         ></v-select>
         <v-select
+          class="pr-6"
           :items="dist"
           label="請選擇鄉鎮市區"
           v-model="seldist"
@@ -22,6 +24,8 @@
           v-on:change="showdata()"
         ></v-select>
       </v-card>
+    </v-row>
+    <v-row align="center" justify="space-around">
       <v-card outlined>
         <h1>測站資訊</h1>
         <p>地點：{{ dataset.place }}</p>
@@ -29,13 +33,6 @@
         <p>目前溫度：{{ dataset.temp }}</p>
         <p>本日最高：{{ dataset.temp_high }}</p>
         <p>本日最低：{{ dataset.temp_low }}</p>
-        <br />
-        <p>相對濕度：{{ dataset.humd * 100 }}%</p>
-        <p>當地氣壓：{{ dataset.pres }}</p>
-        <p>海拔高度：{{ dataset.ele }}M</p>
-        <br />
-        <p>經度：{{ dataset.lat }}</p>
-        <p>緯度：{{ dataset.lon }}</p>
       </v-card>
     </v-row>
   </v-container>
