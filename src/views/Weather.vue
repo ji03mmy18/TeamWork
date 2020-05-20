@@ -26,13 +26,47 @@
       </v-card>
     </v-row>
     <v-row align="center" justify="space-around">
-      <v-card outlined>
-        <h1>測站資訊</h1>
-        <p>地點：{{ dataset.place }}</p>
-        <br />
-        <p>目前溫度：{{ dataset.temp }}</p>
-        <p>本日最高：{{ dataset.temp_high }}</p>
-        <p>本日最低：{{ dataset.temp_low }}</p>
+      <v-card outlined v-show="get_status">
+        <v-list-item two-line>
+          <v-list-item-content>
+            <v-list-item-title class="headline">{{
+              dataset.place
+            }}</v-list-item-title>
+            <v-list-item-subtitle>{{ dataset.time }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-card-text>
+          <v-row align="center">
+            <v-col class="display-3">{{ dataset.temp }}&deg;C</v-col>
+            <v-list-item-subtitle
+              >{{ dataset.temp_high }}/{{
+                dataset.temp_low
+              }}</v-list-item-subtitle
+            >
+          </v-row>
+        </v-card-text>
+
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-send</v-icon>
+          </v-list-item-icon>
+          <v-list-item-subtitle>{{ dataset.wdsd }} m/h</v-list-item-subtitle>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn
+            text
+            block
+            :href="
+              `https://maps.google.com/maps/place/${dataset.lat},${dataset.lon}`
+            "
+            link
+            target="_blank"
+            >站點地圖</v-btn
+          >
+        </v-card-actions>
       </v-card>
     </v-row>
   </v-container>
@@ -65,14 +99,14 @@ export default {
       seldist: '',
       place: [],
       selplace: '',
+      status: false,
       dataset: {
         place: '',
+        time: '',
         temp: '',
         temp_low: '',
         temp_high: '',
-        humd: '',
-        pres: '',
-        ele: '',
+        wdsd: '',
         lat: '',
         lon: ''
       }
@@ -104,6 +138,7 @@ export default {
       for (let i = 0; i < this.apidata.length; i++) {
         if (this.apidata[i].locationName == this.selplace) {
           this.dataset.place = this.apidata[i].locationName
+          this.dataset.time = this.apidata[i].time.obsTime
           this.dataset.temp = this.apidata[i].weatherElement[3].elementValue
           this.dataset.temp_low = this.apidata[
             i
@@ -111,12 +146,19 @@ export default {
           this.dataset.temp_high = this.apidata[
             i
           ].weatherElement[10].elementValue
-          this.dataset.humd = this.apidata[i].weatherElement[4].elementValue
-          this.dataset.pres = this.apidata[i].weatherElement[5].elementValue
-          this.dataset.ele = this.apidata[i].weatherElement[0].elementValue
+          this.dataset.wdsd = this.apidata[i].weatherElement[2].elementValue
           this.dataset.lat = this.apidata[i].lat
           this.dataset.lon = this.apidata[i].lon
         }
+      }
+    }
+  },
+  computed: {
+    get_status() {
+      if (this.selplace) {
+        return true
+      } else {
+        return false
       }
     }
   }
